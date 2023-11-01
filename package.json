@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "cron": "^3.1.6",
+    "dotenv": "^16.3.1",
+    "env-var": "^7.4.1",
     "json-server": "^0.17.4"
   }
 }
