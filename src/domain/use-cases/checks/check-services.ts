@@ -5,7 +5,7 @@ interface ChekServiceUseCase {
   execute(url: string): Promise<boolean>;
 }
 // esto revisa cualquier url
-type SuccessCallback = (() => void) | undefined 
+type SuccessCallback = (() => void) | undefined;
 type ErrorCallback = ((error: string) => void) | undefined;
 
 // checkear si un servicio esta activo cada cierto tiemnpo
@@ -23,20 +23,31 @@ export class CheckService implements ChekServiceUseCase {
         throw new Error(`Error on check service ${url}`);
       }
 
+      const optionsLow = {
+        message: `Service ${url} is ok`,
+        level: LogSeverityLevel.low,
+        origin: "check-service-ts", 
+      };
+
       // creo la isntancia de un nuevo log
-      const log = new LogEntity(`Service ${url} working`, LogSeverityLevel.low);
+      const log = new LogEntity(optionsLow);
       // guardo el log de exito
-      this.logRepository.saveLog(log)
+      this.logRepository.saveLog(log);
       this.successCalback && this.successCalback();
 
-      console.log(`${url} is ok`);
+      // console.log(`${url} is ok`);
 
       return true;
     } catch (error) {
-      const log = new LogEntity(`${url} is not ok. ${error} `, LogSeverityLevel.high);
+      const optionsHigh = {
+        message: `Service ${url} is not ok`,
+        level: LogSeverityLevel.high,
+        origin: "check-service-ts",
+      };
+
+      const log = new LogEntity(optionsHigh);
       this.logRepository.saveLog(log);
       this.errorCallback && this.errorCallback(`${error}`);
-     
 
       return false;
     }
